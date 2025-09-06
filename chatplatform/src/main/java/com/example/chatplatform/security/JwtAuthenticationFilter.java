@@ -30,20 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-    	if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-    	    response.setStatus(HttpServletResponse.SC_OK);
-    	    response.setHeader("Access-Control-Allow-Origin", "https://timely-dragon-c77f43.netlify.app");
-    	    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-    	    response.setHeader("Access-Control-Allow-Headers", "content-type,authorization");
-    	    response.setHeader("Access-Control-Allow-Credentials", "true");
-    	    return; // ⚠️ không đi tiếp filter chain
-    	}
 
-        // Xử lý JWT bình thường
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             String username = jwtUtil.extractUsername(token);
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(token)) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -64,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
 
-        // Bỏ qua các path đã permit, nhưng **không check OPTIONS ở đây**
+        // Bỏ qua filter cho các API public
         return path.startsWith("/api/auth")
                 || path.startsWith("/api/rooms")
                 || path.startsWith("/api/chatrooms")
@@ -72,6 +64,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/files")
                 || path.startsWith("/uploads");
     }
-
-
 }
