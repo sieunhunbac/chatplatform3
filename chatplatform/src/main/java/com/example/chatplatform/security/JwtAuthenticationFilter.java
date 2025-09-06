@@ -65,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Bỏ qua các path đã permit, nhưng **không check OPTIONS ở đây**
         return path.startsWith("/api/auth")
+        		|| path.startsWith("/api/agora/token")
                 || path.startsWith("/api/rooms")
                 || path.startsWith("/api/chatrooms")
                 || path.startsWith("/ws")
