@@ -21,10 +21,6 @@ import com.example.chatplatform.security.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {
-	    "https://inspiring-cobbler-196c25.netlify.app",
-	    "http://localhost:4200"
-	})
 public class AuthController {
 	@Autowired
 	private UserRepository userRepository;
