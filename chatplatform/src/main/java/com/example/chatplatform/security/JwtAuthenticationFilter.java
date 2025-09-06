@@ -35,15 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             String username = jwtUtil.extractUsername(token);
-
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(token)) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails, null, userDetails.getAuthorities());
-
+                    var userDetails = userDetailsService.loadUserByUsername(username);
+                    var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
@@ -55,13 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-
-        // Bỏ qua filter cho các API public
-        return path.startsWith("/api/auth")
-                || path.startsWith("/api/rooms")
-                || path.startsWith("/api/chatrooms")
-                || path.startsWith("/ws")
-                || path.startsWith("/api/files")
-                || path.startsWith("/uploads");
+        return path.startsWith("/api/auth") || path.startsWith("/uploads") || path.startsWith("/ws");
     }
 }
