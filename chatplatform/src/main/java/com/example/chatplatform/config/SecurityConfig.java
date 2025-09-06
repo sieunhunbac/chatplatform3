@@ -61,7 +61,7 @@ public class SecurityConfig {
 	    // Thêm domain FE thực tế
 	    configuration.setAllowedOriginPatterns(List.of(
 	        "http://localhost:4200", 
-	        "https://inspiring-cobbler-196c25.netlify.app/"
+	        "https://inspiring-cobbler-196c25.netlify.app"
 	    ));
 
 	    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

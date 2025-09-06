@@ -30,14 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-    	if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-    	    response.setStatus(HttpServletResponse.SC_OK);
-    	    response.setHeader("Access-Control-Allow-Origin", "https://inspiring-cobbler-196c25.netlify.app/");
-    	    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-    	    response.setHeader("Access-Control-Allow-Headers", "content-type,authorization");
-    	    response.setHeader("Access-Control-Allow-Credentials", "true");
-    	    return; // ⚠️ không đi tiếp filter chain
-    	}
+
+        // Bỏ qua preflight nhưng vẫn đi tiếp filter chain để CORS xử lý
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            filterChain.doFilter(request, response); // ⚡ gọi tiếp để CORS áp dụng
+            return;
+        }
 
         // Xử lý JWT bình thường
         String authHeader = request.getHeader("Authorization");
