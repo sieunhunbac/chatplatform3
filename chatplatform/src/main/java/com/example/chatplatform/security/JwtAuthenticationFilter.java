@@ -30,16 +30,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-
     	if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
     	    response.setStatus(HttpServletResponse.SC_OK);
-    	    response.setHeader("Access-Control-Allow-Origin", "*"); // tạm cho FE nào cũng được
+    	    response.setHeader("Access-Control-Allow-Origin", "https://inspiring-cobbler-196c25.netlify.app/");
     	    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     	    response.setHeader("Access-Control-Allow-Headers", "content-type,authorization");
     	    response.setHeader("Access-Control-Allow-Credentials", "true");
     	    return; // ⚠️ không đi tiếp filter chain
     	}
 
+        // Xử lý JWT bình thường
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
@@ -47,8 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(token)) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails, null, userDetails.getAuthorities());
+
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
@@ -57,10 +60,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.startsWith("/api/auth") || path.startsWith("/uploads") || path.startsWith("/ws");
+
+        // Bỏ qua các path đã permit, nhưng **không check OPTIONS ở đây**
+        return path.startsWith("/api/auth")
+                || path.startsWith("/api/rooms")
+                || path.startsWith("/api/chatrooms")
+                || path.startsWith("/ws")
+                || path.startsWith("/api/files")
+                || path.startsWith("/uploads");
     }
+
+
 }
