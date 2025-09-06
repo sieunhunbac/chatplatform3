@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.agora.media.RtcTokenBuilder;
 @RestController
 @RequestMapping("/api/agora")
-@CrossOrigin(origins = "https://inspiring-cobbler-196c25.netlify.app")
+@CrossOrigin(origins = "https://peppy-pothos-a150c5.netlify.app")
 public class AgoraController {
 
     private final String APP_ID = "a7cc419ef65d49e0b456180f70a2668e";

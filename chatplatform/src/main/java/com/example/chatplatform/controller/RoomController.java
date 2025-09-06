@@ -31,7 +31,7 @@ import jakarta.transaction.Transactional;
 @RestController
 @RequestMapping("/api/rooms")
 @CrossOrigin(origins = {
-	    "https://inspiring-cobbler-196c25.netlify.app"
+	    "https://peppy-pothos-a150c5.netlify.app"
 	})
 public class RoomController {
 

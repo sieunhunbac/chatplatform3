@@ -10,7 +10,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("https://inspiring-cobbler-196c25.netlify.app")  // sửa ở đây
+                .setAllowedOriginPatterns("https://peppy-pothos-a150c5.netlify.app")  // sửa ở đây
                 .withSockJS();
     }
 
