@@ -22,6 +22,7 @@ import com.example.chatplatform.security.JwtAuthenticationFilter;
 import com.example.chatplatform.service.CustomUserDetailsService;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -33,13 +34,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // bật CORS
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // cho phép preflight
-                .requestMatchers("/api/auth/**").permitAll()            // cho login/signup
-                .requestMatchers("/ws/**").permitAll()
-                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight
+                .requestMatchers("/api/auth/**").permitAll()           // login/register
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -52,12 +51,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.setAllowedOriginPatterns(List.of(
-        	"https://*.netlify.app",
+            "https://*.netlify.app", // wildcard cho Netlify
             "http://localhost:4200"
         ));
-        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -66,10 +64,9 @@ public class SecurityConfig {
         return source;
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // chỉ để test, ko bảo mật
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -77,3 +74,4 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
+
