@@ -22,12 +22,12 @@ import com.example.chatplatform.security.JwtUtil;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = {
-	    "https://inspiring-cobbler-196c25.netlify.app",
-	    "http://localhost:4200"
-	})
+    "https://inspiring-cobbler-196c25.netlify.app",
+    "http://localhost:4200"
+})
 public class AuthController {
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -35,6 +35,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    // ✅ Login trả token + user
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
@@ -46,26 +47,36 @@ public class AuthController {
             // Nếu thành công → tạo token
             String token = jwtUtil.generateToken(request.getUsername());
 
-            return ResponseEntity.ok(new LoginResponse(token));
+            // Lấy user từ DB
+            User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+
+            // Tạo DTO (ẩn password)
+            var userDto = new LoginResponse.UserDto(user.getId(), user.getUsername());
+
+            // Trả về cả token + user
+            var res = new LoginResponse(token, userDto);
+
+            return ResponseEntity.ok(res);
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody LoginRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword()); // ⚠ nên mã hóa sau này
+        user.setPassword(request.getPassword()); // ⚠ sau này nên mã hóa
         userRepository.save(user);
 
         return ResponseEntity.ok("User " + request.getUsername() + " registered");
     }
-    
+
     @GetMapping("/test")
     public ResponseEntity<String> testApi() {
         return ResponseEntity.ok("✅ API đã nhận request kèm Authorization");
     }
 
-
 }
+
