@@ -14,8 +14,8 @@ import io.agora.media.RtcTokenBuilder;
 @CrossOrigin(origins = "*") // hoặc domain frontend
 public class AgoraController {
 
-    private final String APP_ID = "YOUR_APP_ID";
-    private final String APP_CERTIFICATE = "YOUR_APP_CERTIFICATE";
+    private final String APP_ID = "0230bbbb0b254599b2357e880af89d62";
+    private final String APP_CERTIFICATE = "272baee99b414fa4a0841881349978da";
 
     @GetMapping("/token")
     public ResponseEntity<String> getToken(@RequestParam String channelName, @RequestParam int uid) {
