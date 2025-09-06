@@ -31,11 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            filterChain.doFilter(request, response); // ⚡ continue chain, đừng return
-            return;
-        }
+    	if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+    	    response.setStatus(HttpServletResponse.SC_OK);
+    	    response.setHeader("Access-Control-Allow-Origin", "*"); // tạm cho FE nào cũng được
+    	    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    	    response.setHeader("Access-Control-Allow-Headers", "content-type,authorization");
+    	    response.setHeader("Access-Control-Allow-Credentials", "true");
+    	    return; // ⚠️ không đi tiếp filter chain
+    	}
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
