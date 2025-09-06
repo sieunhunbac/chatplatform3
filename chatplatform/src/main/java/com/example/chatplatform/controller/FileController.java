@@ -28,7 +28,7 @@ public class FileController {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             // Trả về URL public
-            String fileUrl = "http://localhost:8080/uploads/" + file.getOriginalFilename();
+            String fileUrl = "https://peppy-pothos-a150c5.netlify.app/uploads/" + file.getOriginalFilename();
             return ResponseEntity.ok(fileUrl);
 
         } catch (IOException e) {
