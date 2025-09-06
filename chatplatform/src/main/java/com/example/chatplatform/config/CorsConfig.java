@@ -14,9 +14,13 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("inspiring-cobbler-196c25.netlify.app") // FE domain
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowCredentials(true);
+                .allowedOrigins(
+                	    "https://inspiring-cobbler-196c25.netlify.app", 
+                	    "http://localhost:4200"
+                	)
+                	.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                	.allowedHeaders("*")
+                	.allowCredentials(true);
             }
         };
     }
