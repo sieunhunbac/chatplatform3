@@ -15,24 +15,16 @@ public class FileController {
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            // Tạo thư mục nếu chưa có
-            File uploadDir = new File(UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File dir = new File(UPLOAD_DIR);
+        if (!dir.exists()) dir.mkdirs();
 
-            // Lưu file
-            Path filePath = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        Path path = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
+        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-            // Trả về URL public
-            String fileUrl = "https://peppy-pothos-a150c5.netlify.app/uploads/" + file.getOriginalFilename();
-            return ResponseEntity.ok(fileUrl);
-
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Upload failed: " + e.getMessage());
-        }
+        // Lấy URL backend
+        String fileUrl = "https://chatplatform3-11.onrender.com/uploads/" + file.getOriginalFilename();
+        return ResponseEntity.ok(fileUrl);
     }
 }
+
