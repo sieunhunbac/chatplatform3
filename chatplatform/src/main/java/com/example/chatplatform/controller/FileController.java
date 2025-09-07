@@ -23,7 +23,7 @@ public class FileController {
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
         // Lấy URL backend
-        String fileUrl = "https://chatplatform3-11.onrender.com/uploads/" + file.getOriginalFilename();
+        String fileUrl = "https://chatplatform3-11-yl72.onrender.com/uploads/" + file.getOriginalFilename();
         return ResponseEntity.ok(fileUrl);
     }
 }
