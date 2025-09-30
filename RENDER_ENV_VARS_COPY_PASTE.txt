@@ -1,0 +1,53 @@
+========================================
+RENDER ENVIRONMENT VARIABLES
+Copy từng cặp Key=Value vào Render
+========================================
+
+DATABASE_URL=jdbc:mysql://root:KQLWHqHJAgnWOLWVLXQurWUzLQmmzxtL@shinkansen.proxy.rlwy.net:15929/railway
+
+DATABASE_USERNAME=root
+
+DATABASE_PASSWORD=KQLWHqHJAgnWOLWVLXQurWUzLQmmzxtL
+
+JPA_DDL_AUTO=update
+
+JPA_SHOW_SQL=false
+
+MAX_FILE_SIZE=50MB
+
+MAX_REQUEST_SIZE=50MB
+
+PORT=8080
+
+JWT_SECRET=chatplatform-super-secret-jwt-key-min-256-bits-change-this-later-abc123xyz789
+
+JWT_EXPIRATION=86400000
+
+AGORA_APP_ID=0230bbbb0b254599b2357e880af89d62
+
+AGORA_APP_CERTIFICATE=your-agora-certificate
+
+CORS_ORIGINS=http://localhost:4200,https://chat-platform-frontend.netlify.app,https://chatplatform-frontend3.netlify.app
+
+LOG_LEVEL=INFO
+
+========================================
+HƯỚNG DẪN:
+1. Vào https://dashboard.render.com
+2. Chọn backend service
+3. Tab "Environment"
+4. Click "Add Environment Variable"
+5. Copy Key (phần trước dấu =)
+6. Copy Value (phần sau dấu =)
+7. Lặp lại cho tất cả biến
+8. Click "Save Changes"
+9. Đợi Render redeploy (~2-3 phút)
+========================================
+
+⚠️ LƯU Ý:
+- CORS_ORIGINS: Thay bằng URL Netlify thật của bạn!
+- JWT_SECRET: Nên đổi thành secret mạnh hơn sau!
+- Kiểm tra Railway database connection nếu lỗi
+
+✅ Test sau khi deploy:
+https://chatplatform3-11-yl72.onrender.com/api/rooms
